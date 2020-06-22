@@ -2,10 +2,38 @@ import java.util.*;
 
 public class Solution {
 
-    public static boolean canWin(int leap, int[] game) {
-       return true if you can win the game; otherwise, return false.
+    public static boolean dfs(int index, int leap, int[] game) {
+        game[index] = 1;
+
+        if(index == game.length-1){
+            return true;
+        }
+        if(index + leap >= game.length){
+            return true;
+        }
+
+        ArrayList<Integer> edges = new ArrayList<Integer>();
+
+        if(index-1 >= 0 && game[index-1] == 0){
+            edges.add(index-1);
+        }
+        if(game[index + leap] == 0) {
+            edges.add(index+leap);
+        }
+        if(game[index + 1] == 0) {
+            edges.add(index+1);
+        }
+
+        boolean canTraverse = false;
+        for(int i = 0; i < edges.size(); i++) {
+            canTraverse = canTraverse || dfs(edges.get(i), leap, game);
+        }
+        return canTraverse;
     }
 
+    public static boolean canWin(int leap, int[] game) {
+        return dfs(0, leap, game);
+    }
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int q = scan.nextInt();
